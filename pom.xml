@@ -41,6 +41,8 @@
 	</dependencies>
 
 	<build>
+		<testSourceDirectory>tests/src/test/java</testSourceDirectory>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
