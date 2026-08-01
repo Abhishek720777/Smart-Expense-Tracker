@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -44,6 +45,15 @@ class InMemoryExpenseRepositoryTest {
     }
 
     @Test
+    void findByCategory_IgnoresExpensesWithNullCategory() {
+        repository.save(expense(UUID.randomUUID(), "Mystery", null));
+        repository.save(expense(UUID.randomUUID(), "Groceries", "Food"));
+
+        assertDoesNotThrow(() -> repository.findByCategory("food"));
+        assertEquals(1, repository.findByCategory("food").size());
+    }
+
+    @Test
     void deleteById_RemovesExistingExpenseOnly() {
         Expense saved = repository.save(expense(UUID.randomUUID(), "Taxi", "Transport"));
 
@@ -61,6 +71,15 @@ class InMemoryExpenseRepositoryTest {
 
         assertEquals(1, matches.size());
         assertEquals("Coffee with client", matches.getFirst().getTitle());
+    }
+
+    @Test
+    void findByTitleContaining_IgnoresExpensesWithNullTitle() {
+        repository.save(expense(UUID.randomUUID(), null, "Food"));
+        repository.save(expense(UUID.randomUUID(), "Coffee", "Food"));
+
+        assertDoesNotThrow(() -> repository.findByTitleContaining("coffee"));
+        assertEquals(1, repository.findByTitleContaining("coffee").size());
     }
 
     private Expense expense(UUID id, String title, String category) {

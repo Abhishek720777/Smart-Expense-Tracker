@@ -1,5 +1,6 @@
 package com.example.smartexpensetracker.controller;
 
+import com.example.smartexpensetracker.exception.BadRequestException;
 import com.example.smartexpensetracker.exception.ResourceNotFoundException;
 import com.example.smartexpensetracker.model.Expense;
 import com.example.smartexpensetracker.service.ExpenseService;
@@ -29,13 +30,16 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
-    @Operation(summary = "Add a new expense", description = "Creates a new expense. All fields except id are required.")
+    @Operation(summary = "Add a new expense", description = "Creates a new expense. The server generates the id.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Expense created successfully"),
             @ApiResponse(responseCode = "400", description = "Validation failed - check error message for details")
     })
     @PostMapping
     public ResponseEntity<Expense> addExpense(@Valid @RequestBody Expense expense) {
+        if (expense.getId() != null) {
+            throw new BadRequestException("Expense id must not be provided when creating a new expense.");
+        }
         return new ResponseEntity<>(expenseService.addExpense(expense), HttpStatus.CREATED);
     }
 

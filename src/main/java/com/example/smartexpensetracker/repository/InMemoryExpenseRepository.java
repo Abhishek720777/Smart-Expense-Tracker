@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,14 +34,15 @@ public class InMemoryExpenseRepository implements ExpenseRepository {
     @Override
     public List<Expense> findByCategory(String category) {
         return expenses.values().stream()
-                .filter(e -> e.getCategory().equalsIgnoreCase(category))
+                .filter(e -> Objects.toString(e.getCategory(), "").equalsIgnoreCase(category))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Expense> findByTitleContaining(String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
         return expenses.values().stream()
-                .filter(e -> e.getTitle().toLowerCase().contains(keyword.toLowerCase()))
+                .filter(e -> Objects.toString(e.getTitle(), "").toLowerCase(Locale.ROOT).contains(normalizedKeyword))
                 .collect(Collectors.toList());
     }
 

@@ -49,7 +49,7 @@ A REST API built with Java 21 and Spring Boot 3.4.3 for managing personal expens
 .\mvnw.cmd clean test
 ```
 
-Expected output: `Tests run: 15, Failures: 0, Errors: 0, Skipped: 0 - BUILD SUCCESS`
+Expected output: `Tests run: 20, Failures: 0, Errors: 0, Skipped: 0 - BUILD SUCCESS`
 
 ## API Endpoints
 
