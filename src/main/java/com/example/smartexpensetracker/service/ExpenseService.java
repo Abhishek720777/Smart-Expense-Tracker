@@ -29,6 +29,10 @@ public class ExpenseService {
         return expenseRepository.findByCategory(category);
     }
 
+    public List<Expense> searchExpenses(String keyword) {
+        return expenseRepository.findByTitleContaining(keyword.trim());
+    }
+
     public BigDecimal getTotalExpenses() {
         return expenseRepository.findAll().stream()
                 .map(Expense::getAmount)

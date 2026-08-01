@@ -37,6 +37,13 @@ public class InMemoryExpenseRepository implements ExpenseRepository {
     }
 
     @Override
+    public List<Expense> findByTitleContaining(String keyword) {
+        return expenses.values().stream()
+                .filter(e -> e.getTitle().toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<Expense> findById(UUID id) {
         return Optional.ofNullable(expenses.get(id));
     }
